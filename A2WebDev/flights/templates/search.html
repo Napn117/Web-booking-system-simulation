@@ -1,0 +1,70 @@
+{% load tz %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flight Search</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container py-5">
+    <h1 class="mb-4 text-center">Search Flights To and From Dairy Flat, New Zealand</h1>
+
+    <!-- Search Form -->
+    <form method="get" class="row justify-content-center g-3 mb-4">
+        <div class="col-md-4">
+            <label for="date-picker" class="form-label">Select Date</label>
+            <input type="date" name="date" id="date-picker" class="form-control" required>
+        </div>
+        <div class="col-md-2 align-self-end">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+    </form>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date-picker').value = today;
+        });
+    </script>
+
+    <!-- Booking Search Link -->
+    <div class="text-center mb-4">
+        <a href="{% url 'find_booking' %}" class="btn btn-outline-secondary">🔍 Find an Existing Booking</a>
+    </div>
+
+    <hr>
+
+    {% if flights %}
+        <h2 class="mb-4">Available Flights:</h2>
+        <div class="row g-4">
+            {% for flight in flights %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><strong>{{ flight.aircraft }}</strong></h5>
+                            <p class="card-text"><strong>Flight number:</strong> {{ flight.flight_number }}</p>
+                            <p class="card-text"><strong>Route:</strong> {{ flight.origin.name }} → {{ flight.destination.name }}</p>
+                            <p class="card-text"><strong>Departs:</strong> {{ flight.departure_time|timezone:flight.origin.timezone|date:"D, d M Y H:i" }} {{ flight.departure_abbr }}</p>
+                            <p class="card-text"><strong>Arrives:</strong> {{ flight.arrival_time|timezone:flight.destination.timezone|date:"D, d M Y H:i" }} {{ flight.arrival_abbr }}</p>
+                            <p class="card-text"><strong>Seats Available:</strong> {{ flight.seats_available }}</p>
+                            <p class="card-text"><strong>Price:</strong> ${{ flight.price }}</p>
+                        </div>
+                        <div class="card-footer text-end bg-white border-top-0">
+                            <a href="{% url 'book_flight' flight.id %}" class="btn btn-success">Book this Flight!</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% elif request.GET.date %}
+        <div class="alert alert-warning mt-4 text-center">
+            No flights available for the selected date, sorry :(.
+        </div>
+    {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
