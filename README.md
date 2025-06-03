@@ -36,15 +36,15 @@ Timezones handled:
 
 ---
 
-## 🧱 Technologies Used
+🧱 Technologies Used
 
-- **Python 3.x**
-- **Flask** (backend web framework)
-- **SQLite** (lightweight database)
-- **Jinja2** (templating engine for HTML rendering)
-- **Bootstrap 5** (frontend styling)
-- **Datetime/timezone modules** for flight time accuracy
-
+- Python 3.x
+- Django (full-stack web framework)
+- SQLite (lightweight relational database)
+- HTML & Jinja-style Templates (rendered via Django’s templating engine)
+- Bootstrap 5 (for responsive and clean frontend design)
+- pytz / Django timezone support (for accurate cross-region flight scheduling)
+    
 ---
 
 ## ⚙️ Build & Run Instructions (via PyCharm)
